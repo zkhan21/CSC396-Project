@@ -1,4 +1,4 @@
-# SampleCSC396
+# CSC396-Project
 # Team Members
 # Project Ptch
 # Front End
