@@ -1,0 +1,153 @@
+﻿SmartExpense Tracker API Documentation
+
+
+Summary
+This API documentation provides a comprehensive guide for interacting with the SmartExpense Tracker backend. The application helps users manage their expenses efficiently by offering features such as user registration, expense tracking, and data visualization.
+Key highlights include:
+User Management: Endpoints for registering, logging in, and updating user profiles.
+Expense Management: Allows adding, editing, deleting, and viewing expense records.
+Data Visualization: Provides summarized insights into spending patterns.
+The backend uses MongoDB for data storage and follows RESTful design principles for scalability and security.
+1. User Management
+Register User
+- Method: POST
+- Endpoint: /users/register
+- Description: Create a new user account.
+Request Body:
+{
+ "username": "string",
+ "email": "string",
+ "password": "string"
+}
+Response:
+- 201 Created:
+{
+ "message": "User registered successfully",
+ "userId": "string"
+}
+- 400 Bad Request: Missing or invalid data.
+Login User
+- Method: POST
+- Endpoint: /users/login
+- Description: Authenticate and log in a user.
+Request Body:
+{
+ "email": "string",
+ "password": "string"
+}
+Response:
+- 200 OK:
+{
+ "token": "string",
+ "userId": "string"
+}
+- 401 Unauthorized: Invalid credentials.
+Update Profile
+- Method: PUT
+- Endpoint: /users/profile
+- Description: Update user profile details.
+Headers:
+{
+ "Authorization": "Bearer <token>"
+}
+Request Body:
+{
+ "username": "string",
+ "email": "string"
+}
+Response:
+- 200 OK: Profile updated.
+{
+ "message": "Profile updated successfully"
+}
+- 401 Unauthorized: Invalid or missing token.
+2. Expense Management
+Add Expense
+- Method: POST
+- Endpoint: /expenses
+- Description: Add a new expense record.
+Headers:
+{
+ "Authorization": "Bearer <token>"
+}
+Request Body:
+{
+ "category": "string",
+ "amount": "number",
+ "date": "string",
+ "notes": "string"
+}
+Response:
+- 201 Created: Expense added.
+{
+ "message": "Expense added successfully",
+ "expenseId": "string"
+}
+Edit Expense
+- Method: PUT
+- Endpoint: /expenses/:id
+- Description: Update an expense record.
+Headers:
+{
+ "Authorization": "Bearer <token>"
+}
+Request Body:
+{
+ "category": "string",
+ "amount": "number",
+ "date": "string",
+ "notes": "string"
+}
+Response:
+- 200 OK: Expense updated.
+{
+ "message": "Expense updated successfully"
+}
+Delete Expense
+- Method: DELETE
+- Endpoint: /expenses/:id
+- Description: Delete an expense record.
+Headers:
+{
+ "Authorization": "Bearer <token>"
+}
+Response:
+- 200 OK: Expense deleted.
+{
+ "message": "Expense deleted successfully"
+}
+Get All Expenses
+- Method: GET
+- Endpoint: /expenses
+- Description: Retrieve all expenses for the logged-in user.
+Headers:
+{
+ "Authorization": "Bearer <token>"
+}
+Response:
+- 200 OK: Returns a list of expenses.
+[
+ {
+   "expenseId": "string",
+   "category": "string",
+   "amount": "number",
+   "date": "string",
+   "notes": "string"
+ }
+]
+3. Data Visualization
+Get Spending Summary
+- Method: GET
+- Endpoint: /expenses/summary
+- Description: Retrieve spending summary by category.
+Headers:
+{
+ "Authorization": "Bearer <token>"
+}
+Response:
+- 200 OK: Returns a summary of spending by category.
+{
+ "Food": 150.0,
+ "Travel": 75.0,
+ "Utilities": 200.0
+}
