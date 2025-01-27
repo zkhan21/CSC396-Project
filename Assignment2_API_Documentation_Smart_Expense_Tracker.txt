@@ -1,5 +1,4 @@
-﻿SmartExpense Tracker API Documentation
-
+## ﻿SmartExpense Tracker API Documentation
 
 Summary
 This API documentation provides a comprehensive guide for interacting with the SmartExpense Tracker backend. The application helps users manage their expenses efficiently by offering features such as user registration, expense tracking, and data visualization.
