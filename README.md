@@ -1,7 +1,7 @@
 # CSC396-Project
 SmartEXpense Tracker
 # Team Members
-Zuhair Khan (@zkhan21), Israail Ghazzal ([@RGhazzal](https://github.com/RGhazzal)), Joe Viola, Omer Khaleel
+Zuhair Khan ([@zkhan21](https://github.com/Zkhan21)), Israail Ghazzal ([@RGhazzal](https://github.com/RGhazzal)), Joe Viola, Omer Khaleel
 # Project Pitch
 SmartExpense Tracker is a web-based application designed to help individuals easily manage their expenses and gain insights into their spending habits. Many people struggle to keep track of their finances, leading to overspending and financial stress. What sets SmartExpense Tracker apart is its intuitive interface that makes it incredibly easy for users to categorize their transactions, allowing for better visualization of where their money is going through engaging charts and graphs, making budgeting simple and accessible.
 # Front End Overview
