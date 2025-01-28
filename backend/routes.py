@@ -1,19 +1,31 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 from backend.models import expenses_collection
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+app = Flask(__name__, static_folder='static', template_folder='templates')
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
 
-# 📌 Home Route (For Testing)
+@app.before_request
+def log_request_info():
+    print("\n🚀 Incoming Request 🚀")
+    print(f"➡️ Method: {request.method}")
+    print(f"➡️ Path: {request.path}")
+    print(f"➡️ Headers: {dict(request.headers)}")
+    print(f"➡️ Body: {request.get_data()}\n")
+
+
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to SmartExpense Tracker API!"})
+    return render_template('index.html')
 
-# 📌 Add an Expense (POST)
+
+# 📌 Add Expense (POST)
 @app.route('/expenses', methods=['POST'])
 def add_expense():
     data = request.json
+    if not data:
+        return jsonify({"error": "Invalid JSON body"}), 400
+
     if not all(key in data for key in ("category", "amount", "date", "notes")):
         return jsonify({"error": "Missing required fields"}), 400
 
@@ -26,11 +38,12 @@ def add_expense():
     expenses_collection.insert_one(expense)
     return jsonify({"message": "Expense added successfully"}), 201
 
-# 📌 Get All Expenses (GET)
+
 @app.route('/expenses', methods=['GET'])
 def get_expenses():
     expenses = list(expenses_collection.find({}, {"_id": 0}))  # Exclude MongoDB IDs
     return jsonify(expenses), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
