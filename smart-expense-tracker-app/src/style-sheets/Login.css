@@ -1,0 +1,96 @@
+/* Default background settings */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212; /* Darker background color for better contrast */
+}
+
+/* Background container */
+.background {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 5vh 10px; /* Adds space on the sides to prevent cut-off */
+}
+
+/* Logo styling */
+.logo {
+  width: 220px; /* Increased logo size */
+  margin-bottom: 20px; /* Space between logo and login box */
+}
+
+/* Login container */
+.container {
+  width: 90%; /* Ensures it fits smaller screens */
+  max-width: 400px; /* Prevents it from getting too wide */
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9); /* Light background with slight transparency */
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Adds a soft shadow */
+}
+
+/* Form styling */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Input fields */
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Login button */
+.button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Error message */
+.error {
+  color: red;
+}
+
+/* Toggle login/signup link */
+.toggleText {
+  margin-top: 15px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .background {
+    background-size: cover;
+    background-position: top;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+  .background {
+    background-size: contain;
+    background-position: center;
+  }
+
+  .container {
+    width: 95%;
+    padding: 25px;
+  }
+}
