@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Login - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <img src="{{ url_for('static', filename='assets/smartExpenseTrackerLogo.jpeg') }}" alt="Logo" class="logo">
+    <h2>Login</h2>
+    
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('login') }}" method="POST">
+        <label>Email:</label>
+        <input type="email" name="email" required>
+        
+        <label>Password:</label>
+        <input type="password" name="password" required>
+        
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+</div>
+{% endblock %}

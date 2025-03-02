@@ -1,22 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartExpense Tracker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <h1>Welcome to SmartExpense Tracker</h1>
-    <p>This is the home page of the SmartExpense Tracker API.</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Home - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome to Smart Expense Tracker</h1>
+    <p>Track your expenses efficiently.</p>
+    <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+</div>
+{% endblock %}

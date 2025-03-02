@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Smart Expense Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="nav-btn">Home</a>
+    
+        {% if session.get('user') %}
+            <a href="{{ url_for('dashboard') }}" class="nav-btn">Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="nav-btn logout-btn">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
+        {% endif %}
+    </nav>
+    
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

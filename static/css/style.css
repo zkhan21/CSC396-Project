@@ -1,0 +1,77 @@
+/* General body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Navigation Bar */
+.navbar {
+  background-color: #222;  /* Neutral dark gray instead of green */
+  padding: 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn {
+  background-color: #00a000;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.nav-btn:hover {
+  background-color: #00c000;
+}
+
+/* Home Page */
+.container {
+  max-width: 500px;
+  margin: 120px auto; /* Increased spacing */
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.login-btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 14px 28px;
+  text-decoration: none;
+  border-radius: 12px;
+  font-size: 20px;
+  transition: background-color 0.3s;
+  margin-top: 25px; /* Move login button down */
+}
+
+.logout-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Logo Styling */
+.logo {
+  width: 180px; /* Smaller logo */
+  height: auto;
+  border-radius: 20px; /* Rounded corners */
+  display: block;
+  margin: 30px auto; /* Centered & gap from top */
+}
