@@ -10,15 +10,27 @@ body {
 
 /* Navigation Bar */
 .navbar {
-  background-color: #222;  /* Neutral dark gray instead of green */
+  background-color: #222;
   padding: 10px 15px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Ensures logout stays on the right */
   align-items: center;
-  gap: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* Left-aligned buttons (Home, Dashboard) */
+.nav-left {
+  display: flex;
+  gap: 15px;
+  margin-left: 15px;
+}
+
+/* Right-aligned Logout Button */
+.nav-right {
+  margin-right: 15px;
+}
+
+/* Navigation Buttons */
 .nav-btn {
   background-color: #00a000;
   color: white;
@@ -27,30 +39,49 @@ body {
   text-decoration: none;
   font-size: 16px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
   border: none;
+  cursor: pointer;
+  display: inline-block;
 }
 
 .nav-btn:hover {
   background-color: #00c000;
+  transform: scale(1.05);
 }
 
-/* Home Page */
+/* Logout Button (Top Right) */
+.logout-btn {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.logout-btn:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
+}
+
+/* Fixing Home Page Centering */
 .container {
   max-width: 500px;
-  margin: 120px auto; /* Increased spacing */
+  margin: 200px auto; /* Centers it vertically */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 60vh; /* Makes sure the content is vertically centered */
 }
 
-h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-
-p {
-  font-size: 20px;
-  margin-bottom: 30px;
-}
-
+/* Center the login button */
 .login-btn {
   display: inline-block;
   background-color: #007bff;
@@ -60,18 +91,38 @@ p {
   border-radius: 12px;
   font-size: 20px;
   transition: background-color 0.3s;
-  margin-top: 25px; /* Move login button down */
+  margin-top: 25px; /* Moves login button down */
 }
 
-.logout-btn:hover {
-    background-color: #cc0000;
+.login-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
 }
 
-/* Logo Styling */
-.logo {
-  width: 180px; /* Smaller logo */
-  height: auto;
-  border-radius: 20px; /* Rounded corners */
-  display: block;
-  margin: 30px auto; /* Centered & gap from top */
+/* Dashboard Stats Box Fix */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px; /* Adds proper spacing */
+  margin-top: 30px;
+}
+
+/* Individual Dashboard Cards */
+.card {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 20px;
+  font-weight: bold;
 }

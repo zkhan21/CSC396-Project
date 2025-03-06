@@ -5,21 +5,26 @@
     <title>{% block title %}Smart Expense Tracker{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/buttons.js') }}" defer></script> <!-- Only one JS file -->
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <a href="{{ url_for('home') }}" class="nav-btn">Home</a>
-    
-        {% if session.get('user') %}
-            <a href="{{ url_for('dashboard') }}" class="nav-btn">Dashboard</a>
-            <a href="{{ url_for('logout') }}" class="nav-btn logout-btn">Logout</a>
-        {% else %}
-            <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
-        {% endif %}
+        <div class="nav-left">
+            <a href="{{ url_for('home') }}" class="nav-btn">Home</a>
+            {% if session.get('user') %}
+                <a href="{{ url_for('dashboard') }}" class="nav-btn">Dashboard</a>
+            {% endif %}
+        </div>
+
+        <div class="nav-right">
+            {% if session.get('user') %}
+                <a href="{{ url_for('logout') }}" class="nav-btn logout-btn" id="logout-btn">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
+            {% endif %}
+        </div>
     </nav>
-    
 
     <div class="content">
         {% block content %}{% endblock %}

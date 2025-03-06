@@ -1,90 +1,67 @@
 /* Centered Login Form */
 .login-container {
-    max-width: 400px;
-    background: #222;
-    padding: 25px;
-    margin: 100px auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Logo */
-  .login-container .logo {
-    width: 150px;
-    margin-bottom: 20px;
-  }
-  
-  /* Login Form */
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  label {
-    text-align: left;
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #ddd;
-  }
-  
-  /* Input Fields */
-  input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #555;
-    background: #333;
-    color: white;
-    font-size: 16px;
-    text-align: left;
-    margin-bottom: 15px;
-  }
-  
-  input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  /* Login Button */
-  .login-btn {
-    width: 100%;
-    padding: 14px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    font-size: 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-  }
-  
-  .login-btn:hover {
-    background-color: #0056b3;
-  }
-  /* Logout Button */
-
-.logout-btn {
-    background-color: #ff4d4d; /* Red logout button */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.3s;
+  max-width: 400px;
+  background: #222;
+  padding: 25px;
+  margin: 100px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.logout-btn:hover {
-    background-color: #cc0000; /* Slightly darker red on hover */
+/* Logo */
+.login-container .logo {
+  width: 120px;
+  margin-bottom: 20px;
 }
-  
-  /* Error Message */
-  .error {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  
+
+/* Login Form */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  text-align: left;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #ddd;
+}
+
+/* Input Fields */
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #333;
+  color: white;
+  font-size: 16px;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Login Button */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}

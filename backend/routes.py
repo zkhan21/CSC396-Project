@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_cors import CORS
 from backend.models import expenses_collection, users_collection
 from jinja2 import FileSystemLoader
@@ -12,7 +12,15 @@ STATIC_DIR = os.path.join(BASE_DIR, '../static')  # Adjust for static files
 app = Flask(__name__, static_folder=STATIC_DIR, template_folder=TEMPLATE_DIR)
 app.jinja_loader = FileSystemLoader(TEMPLATE_DIR)
 CORS(app)
-app.secret_key = "supersecretkey"
+app.secret_key = "supersecretkey"  # 🔒 TODO: Move this to environment variables in production
+
+# Ensure the session is maintained correctly
+@app.before_request
+def ensure_session():
+    """ Ensures session consistency across requests """
+    session.permanent = True  # Makes session persist longer
+    if 'user' not in session:
+        return  # Prevents clearing session data unnecessarily
 
 @app.route('/')
 def home():
@@ -20,67 +28,78 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """ Handles user login """
     error = None
+
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password'].encode('utf-8')
+        email = request.form.get('email')
+        password = request.form.get('password', '').encode('utf-8')
 
         user = users_collection.find_one({"email": email})
 
         if user:
-            stored_password = user["password"].encode('utf-8')  # Convert back to bytes
+            stored_password = user["password"].encode('utf-8')
 
-            # Check hashed password
-            if bcrypt.checkpw(password, stored_password):
-                session['user'] = email
-                return redirect(url_for('dashboard'))
-            else:
-                error = "Incorrect email or password."
+            try:
+                if bcrypt.checkpw(password, stored_password):
+                    session['user'] = email
+                    flash("Login successful!", "success")
+                    return redirect(url_for('dashboard'))
+                else:
+                    flash("Incorrect email or password.", "error")
+            except Exception as e:
+                flash("An error occurred during login. Please try again.", "error")
         else:
-            error = "Incorrect email or password."
+            flash("Incorrect email or password.", "error")
 
     return render_template('login.html', error=error)
 
-
 def hash_password(password):
+    """ Hash a given password """
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """ Handles user registration """
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        # Check if user already exists
         if users_collection.find_one({"email": email}):
-            return "User already exists!"
+            flash("User already exists! Try logging in.", "error")
+            return redirect(url_for('register'))
 
-        # Hash the password
         hashed_password = hash_password(password)
 
-        # Store user with hashed password
         users_collection.insert_one({
             "email": email,
-            "password": hashed_password.decode('utf-8')  # Store as string
+            "password": hashed_password.decode('utf-8')
         })
 
+        flash("Registration successful! You can now log in.", "success")
         return redirect(url_for('login'))
 
     return render_template('register.html')
 
 @app.route('/dashboard')
 def dashboard():
+    """ Ensures only logged-in users can access the dashboard """
     if 'user' in session:
         return render_template('dashboard.html', user=session['user'])
+    
+    flash("You need to log in to access the dashboard.", "error")
     return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None)  # Clear session
-    return redirect(url_for('login'))  # Redirect to login
+    """ Handles user logout """
+    session.pop('user', None)
+    flash("You have been logged out.", "info")
+    return redirect(url_for('home'))
 
 @app.context_processor
 def inject_session():
+    """ Injects session data into all templates """
     return dict(session=session)
 
 if __name__ == '__main__':

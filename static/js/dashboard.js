@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     setupNavigationButtons();
-
+    
     // Handle login form submission
     const loginForm = document.querySelector("form");
     if (loginForm) {
