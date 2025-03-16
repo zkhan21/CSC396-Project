@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transactions.css') }}">
+{% endblock %}
+{% block content %}
+    <h1>All Transactions</h1>
+    
+    <!-- Summary Section -->
+    <div class="summary">
+        <h2>Total Spent: ${{ "%.2f"|format(summary.total) }}</h2>
+        <canvas id="categoryChart"></canvas>
+        <canvas id="spendingTrendChart"></canvas>
+    </div>
+
+    <!-- Add Transaction and Delete Transaction(s) Buttons -->
+    <div class="action-buttons">
+        <a href="{{ url_for('main.add_transaction') }}" class="btn">Add Transaction</a>
+        <button type="submit" form="deleteForm" class="btn btn-danger">Delete Transaction(s)</button>
+    </div>
+
+    <!-- Bulk Delete Form -->
+    <form id="deleteForm" method="POST" action="{{ url_for('main.delete_transactions') }}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="transaction_ids" value="{{ t._id }}">
+                    </td>
+                    <td>{{ t.date.strftime('%m-%d-%Y') }}</td>
+                    <td>{{ t.category }}</td>
+                    <td>{{ t.description|capitalize }}</td>
+                    <td>${{ "%.2f"|format(t.amount) }}</td>
+                    <td class="table-actions">
+                        <a href="{{ url_for('main.edit_transaction', transaction_id=t._id) }}" class="btn btn-small">Edit</a>
+                        <a href="{{ url_for('main.delete_transaction', transaction_id=t._id) }}" class="btn btn-small btn-secondary">Delete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure Jinja-rendered variables are safely injected as valid JavaScript
+            const categories = JSON.parse('{{ summary.categories|default([])|tojson|safe }}');
+            const amounts = JSON.parse('{{ summary.amounts|default([])|tojson|safe }}');
+            const dates = JSON.parse('{{ summary.dates|default([])|tojson|safe }}');
+            const trendAmounts = JSON.parse('{{ summary.trend_amounts|default([])|tojson|safe }}');
+    
+            const categoryData = {
+                labels: categories,
+                datasets: [{
+                    label: 'Spending by Category',
+                    data: amounts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+    
+            const trendData = {
+                labels: dates,
+                datasets: [{
+                    label: 'Spending Trend',
+                    data: trendAmounts,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            };
+    
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'pie',
+                data: categoryData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                generateLabels: function(chart) {
+                                    const data = chart.data;
+                                    if (data.labels.length && data.datasets.length) {
+                                        return data.labels.map(function(label, i) {
+                                            const value = data.datasets[0].data[i];
+                                            const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(2);
+                                            return {
+                                                text: `${label}: $${value} (${percentage}%)`, // Add $ and percentage
+                                                fillStyle: data.datasets[0].backgroundColor[i],
+                                                hidden: false,
+                                                index: i
+                                            };
+                                        });
+                                    }
+                                    return [];
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${label}: $${value} (${percentage}%)`; // Add $ and percentage
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+    
+            const trendCtx = document.getElementById('spendingTrendChart').getContext('2d');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: trendData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Spending Trend Over Time'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    
+{% endblock %}

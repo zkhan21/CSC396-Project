@@ -10,3 +10,7 @@ client = MongoClient(os.environ.get('MONGO_URI'))
 db = client.get_database()  # Automatically uses the database in the URI
 
 print("Database connection successful!")
+
+# Export the db object
+def get_db():
+    return db

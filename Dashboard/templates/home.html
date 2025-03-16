@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="home-container">
+        <h1>Welcome to the SmartExpense Tracker Dashboard</h1>
+        <p class="date-time">Today is <span id="current-date">{{ current_date }}</span></p>
+        <p class="date-time">The current time is <span id="current-time">{{ current_time }}</span></p>
+        
+        <!-- Add a login link for unauthenticated users -->
+        {% if not current_user.is_authenticated %}
+            <div class="login-prompt">
+                <p>Please <a href="{{ url_for('auth.login') }}">login</a> to access your dashboard.</p>
+            </div>
+        {% else %}
+            <div class="dashboard-link">
+                <p>Go to your <a href="{{ url_for('main.dashboard') }}">dashboard</a>.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

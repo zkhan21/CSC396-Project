@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/categories.css') }}">
+{% endblock %}
+{% block content %}
+    <h1>Categories</h1>
+
+    <!-- List of Categories -->
+    <div class="categories-list">
+        <h2>Pre-made Categories</h2>
+        <ul>
+            {% for category in pre_made_categories %}
+            <li>{{ category }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Your Categories</h2>
+        <ul id="user-categories">
+            {% for category in user_categories %}
+            <li>
+                {{ category }}
+                <form method="POST" action="{{ url_for('main.delete_category') }}" style="display: inline;">
+                    <input type="hidden" name="category_name" value="{{ category }}">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </li>
+            {% else %}
+            <li>No custom categories added yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Add Category Form -->
+    <div class="add-category">
+        <h2>Add a New Category</h2>
+        <form method="POST" action="{{ url_for('main.add_category') }}">
+            <input type="text" name="category_name" placeholder="Enter a new category" required>
+            <button type="submit" class="btn">Add Category</button>
+        </form>
+    </div>
+{% endblock %}

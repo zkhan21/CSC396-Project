@@ -1,0 +1,42 @@
+.categories-list {
+    margin-bottom: 2rem;
+}
+
+.categories-list h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.categories-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.categories-list li {
+    background: #f9f9f9;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-category {
+    margin-top: 2rem;
+}
+
+.add-category h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.add-category input {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+}

@@ -1,17 +1,12 @@
-# routes/auth.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user  # Add this import
-from pymongo import MongoClient
-import os
-from dotenv import load_dotenv
+from flask_login import login_user, logout_user, login_required
 from models.user import User
-from datetime import datetime  # Add this import for registration
-
-load_dotenv()
-
-# MongoDB Connection
-client = MongoClient(os.environ.get('MONGO_URI'))
-db = client.get_database()
+from datetime import datetime
+from database import get_db  # Import the db object
+from database import db  # Import the db object
+from werkzeug.security import generate_password_hash, check_password_hash
+import scrypt  # Import scrypt for password hashing
+import os
 
 # Blueprint Setup
 auth_bp = Blueprint('auth', __name__)
@@ -23,12 +18,25 @@ def login():
         password = request.form.get('password')
         
         user_data = db.users.find_one({'email': email})
-        if user_data and user_data['password'] == password:  # Plain-text comparison for testing
-            user = User(user_data)
-            login_user(user)  # Log in the user
-            return redirect(url_for('main.dashboard'))
-        else:
-            flash('Invalid email or password')
+        if user_data:
+            # Extract the salt and hash from the stored password
+            stored_password = user_data['password']
+            if stored_password.startswith("scrypt:"):
+                _, salt_hex, stored_hash = stored_password.split(":")
+                salt = bytes.fromhex(salt_hex)
+                
+                # Hash the provided password with the stored salt
+                hashed_password = scrypt.hash(password.encode('utf-8'), salt, N=16384, r=8, p=1).hex()
+                
+                # Compare the hashes
+                if hashed_password == stored_hash:
+                    user = User(user_data)
+                    login_user(user)  # Log in the user
+                    flash('Logged in successfully!', 'success')
+                    return redirect(url_for('main.dashboard'))
+        
+        # If login fails
+        flash('Invalid email or password', 'error')
     
     return render_template('login.html')
 
@@ -40,15 +48,29 @@ def register():
         
         # Check if user already exists
         if db.users.find_one({'email': email}):
-            flash('Email already registered')
+            flash('An account with this email already exists.', 'error')
+            return redirect(url_for('auth.register'))
         else:
-            # Insert new user
+            # Generate a random salt
+            salt = os.urandom(16)  # 16 bytes (128 bits) of random data
+            
+            # Hash the password using scrypt
+            hashed_password = scrypt.hash(password.encode('utf-8'), salt, N=16384, r=8, p=1).hex()
+            
+            # Insert new user with the hashed password
             db.users.insert_one({
                 'email': email,
-                'password': password,  # Plain-text password for testing
+                'password': f"scrypt:{salt.hex()}:{hashed_password}",  # Store the salt and hash
                 'created_at': datetime.utcnow()
             })
-            flash('Registration successful! Please log in.')
+            flash('Registration successful! Please log in.', 'success')
             return redirect(url_for('auth.login'))
     
     return render_template('register.html')
+
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()  # Log out the user
+    flash('You have been logged out. Please log in again to access the dashboard.', 'info')
+    return redirect(url_for('auth.login'))

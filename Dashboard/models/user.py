@@ -1,4 +1,3 @@
-# models/user.py
 from flask_login import UserMixin
 from bson import ObjectId
 
