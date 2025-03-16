@@ -2,7 +2,7 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# Ensure .env is loaded
+# Load environment variables
 load_dotenv()
 
 # Import Config (Fixing Import Path)
@@ -18,5 +18,6 @@ db = client["SmartExpenseTracker"]
 # Define Collections
 expenses_collection = db["expenses"]
 users_collection = db["users"]
+categories_collection = db["categories"]  # Added categories collection for storing user-defined categories
 
 print("✅ Connected to MongoDB Atlas")

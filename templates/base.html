@@ -5,9 +5,17 @@
     <title>{% block title %}Smart Expense Tracker{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <script src="{{ url_for('static', filename='js/buttons.js') }}" defer></script> <!-- Only one JS file -->
+
+    {% if session.get('user') %}
+        <script src="{{ url_for('static', filename='js/new_dashboard.js') }}" defer></script>
+    {% endif %}
 </head>
 <body>
+    <h1>✅ Flask is working! This should be visible.</h1>
+    <script>
+        console.log("✅ If this runs, JavaScript is executing.");
+        console.log("document.body:", document.body);
+    </script>
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-left">

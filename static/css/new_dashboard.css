@@ -1,0 +1,25 @@
+.dashboard-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.action-btn {
+    background-color: #008CBA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.action-btn:hover {
+    background-color: #005f73;
+}
+
+#category-section {
+    margin-top: 20px;
+    background-color: #222;
+    padding: 15px;
+    border-radius: 10px;
+}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}New Dashboard - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1>Welcome, {{ user }}!</h1>
+    <p>Manage your expenses here.</p>
+
+    <button id="add-category-btn" class="action-btn">➕ Add Category</button>
+    <button id="view-categories-btn" class="action-btn">📂 View Categories</button>
+
+    <div id="category-section" style="display: none;">
+        <h2>Your Categories</h2>
+        <ul id="category-list"></ul>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/new_dashboard.js') }}"></script>
+
+{% endblock %}
