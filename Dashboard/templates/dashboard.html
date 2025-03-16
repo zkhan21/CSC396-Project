@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Your Expense Tracker!</h1>
+        
+        <!-- Summary Section -->
+        <div class="summary">
+            <h2>Total Spent: ${{ summary.total }}</h2>
+            <canvas id="categoryChart"></canvas>
+        </div>
+
+        <!-- Transactions Table -->
+        <h2>Transactions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ t.category }}</td>
+                    <td>{{ t.description }}</td>
+                    <td>${{ t.amount }}</td>
+                    <td class="table-actions">
+                        <a href="{{ url_for('main.edit_transaction', transaction_id=t._id) }}" class="btn btn-small">Edit</a>
+                        <a href="{{ url_for('main.delete_transaction', transaction_id=t._id) }}" class="btn btn-small btn-secondary">Delete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Add Transaction Button -->
+        <a href="{{ url_for('main.add_transaction') }}" class="btn">Add Transaction</a>
+    </div>
+
+    <!-- Chart.js Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+    
+            // Ensure safe JSON formatting
+            const labels = JSON.parse('{{ summary.by_category.keys() | list | tojson | safe }}');
+            const dataValues = JSON.parse('{{ summary.by_category.values() | list | tojson | safe }}');
+    
+            const categoryChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Expenses by Category',
+                        data: dataValues,
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+                        ]
+                    }]
+                }
+            });
+        });
+    </script>
+</body>
+</html>

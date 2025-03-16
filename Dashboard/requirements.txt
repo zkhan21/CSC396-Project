@@ -1,0 +1,6 @@
+flask
+flask-login
+pymongo
+python-dotenv
+dnspython
+chart.js

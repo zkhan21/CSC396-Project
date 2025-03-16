@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Transaction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Transaction</h1>
+        <form method="POST">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" step="0.01" value="{{ transaction.amount }}" required>
+            <br>
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                <option value="Food" {% if transaction.category == 'Food' %}selected{% endif %}>Food</option>
+                <option value="Shopping" {% if transaction.category == 'Shopping' %}selected{% endif %}>Shopping</option>
+                <option value="Transport" {% if transaction.category == 'Transport' %}selected{% endif %}>Transport</option>
+                <option value="Entertainment" {% if transaction.category == 'Entertainment' %}selected{% endif %}>Entertainment</option>
+                <option value="Other" {% if transaction.category == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+            <br>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" value="{{ transaction.description }}">
+            <br>
+            <button type="submit" class="btn">Update Transaction</button>
+        </form>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</body>
+</html>
