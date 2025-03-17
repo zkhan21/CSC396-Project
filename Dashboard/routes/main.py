@@ -38,9 +38,10 @@ def transactions():
             except ValueError:
                 t['date'] = None  # Handle invalid date format
 
-    # Calculate summary data for charts
+    # Calculate summary data for charts and totals
     summary = {
-        'balance': 0,  # Initialize balance
+        'balance': 0,  # Total Balance (deposits - withdrawals - other spending)
+        'spending': 0,  # Total Spending (excluding deposits and withdrawals)
         'categories': [],
         'amounts': [],
         'dates': [],
@@ -48,20 +49,28 @@ def transactions():
         'deposit_withdrawal': [0, 0]  # [Deposit, Withdrawal]
     }
 
-    # Calculate spending by category and balance
+    # Calculate spending by category, balance, and total spending
     by_category = {}
     for t in transactions:
         category = t.get('category', 'Uncategorized')
         amount = t.get('amount', 0)
         by_category[category] = by_category.get(category, 0) + amount
 
-        # Update balance based on category
+        # Update balance (deposits are positive, withdrawals and other spending are negative)
         if category == 'Deposit':
             summary['balance'] += amount
-            summary['deposit_withdrawal'][0] += amount  # Add to deposit total
-        elif category == 'Withdrawal':
+        elif category == 'Withdrawal' or category not in ['Deposit', 'Withdrawal']:
             summary['balance'] -= amount
-            summary['deposit_withdrawal'][1] += amount  # Add to withdrawal total
+
+        # Update spending (excluding deposits and withdrawals)
+        if category != 'Deposit' and category != 'Withdrawal':
+            summary['spending'] += amount
+
+        # Update deposit and withdrawal totals
+        if category == 'Deposit':
+            summary['deposit_withdrawal'][0] += amount
+        elif category == 'Withdrawal':
+            summary['deposit_withdrawal'][1] += amount
 
     summary['categories'] = list(by_category.keys())
     summary['amounts'] = list(by_category.values())
