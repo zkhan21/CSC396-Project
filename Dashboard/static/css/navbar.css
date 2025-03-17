@@ -1,0 +1,87 @@
+/* Navbar Styling */
+.navbar {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    width: 100%;
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar Container */
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Enhanced Navbar Brand (SmartExpense Tracker) */
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif; /* Modern Font */
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(45deg, #f8d210, #ff6f61);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Navbar Brand Hover Effect */
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+/* Navbar Links */
+.navbar-nav {
+    list-style: none;
+    display: flex;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav a {
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease, transform 0.2s;
+    border-radius: 5px;
+}
+
+/* Hover Effect for Links */
+.navbar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Logout Button Styling */
+.logout-container {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.logout-button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid white;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.logout-button:hover {
+    background: white;
+    color: #007bff;
+    transform: scale(1.05);
+}
