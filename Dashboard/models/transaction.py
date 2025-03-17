@@ -33,3 +33,6 @@ class Transaction:
             {'_id': ObjectId(transaction_id)},
             {'$set': update_data}
         )
+    @staticmethod
+    def get_filtered(db, query):
+        return db.transactions.find(query)

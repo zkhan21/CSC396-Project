@@ -24,44 +24,45 @@ def dashboard():
 @main_bp.route('/transactions')
 @login_required
 def transactions():
+    filter_date = request.args.get('filter_date')
+    filter_category = request.args.get('filter_category')
+
     # Get transactions for the current user
-    transactions = list(Transaction.get_by_user_id(db, current_user.id))
+    query = {'user_id': current_user.id}
+
+    if filter_date:
+        query['date'] = datetime.strptime(filter_date, '%Y-%m-%d')
     
+    if filter_category:
+        query['category'] = filter_category
+
+    transactions = list(Transaction.get_filtered(db, query))
+
     # Calculate summary data for charts
     summary = {
         'total': sum(t['amount'] for t in transactions),
-        'categories': [],  # List of categories
-        'amounts': [],    # List of amounts corresponding to categories
-        'dates': [],      # List of unique dates
-        'trend_amounts': []  # List of total amounts per date
+        'categories': list(set(t['category'] for t in transactions)),  # Unique categories
+        'amounts': [],
+        'dates': [],
+        'trend_amounts': []
     }
 
-    # Calculate spending by category
+    # Calculate spending trend and categories
     by_category = {}
+    by_date = {}
+
     for t in transactions:
         by_category[t['category']] = by_category.get(t['category'], 0) + t['amount']
-    
-    # Populate categories and amounts for the pie chart
-    summary['categories'] = list(by_category.keys())
-    summary['amounts'] = list(by_category.values())
-
-    # Calculate spending trend over time (by date)
-    by_date = {}
-    for t in transactions:
-        # Ensure the date is a datetime object
-        if isinstance(t['date'], str):
-            date = datetime.strptime(t['date'], '%Y-%m-%d')
-        else:
-            date = t['date']
         
-        date_str = date.strftime('%Y-%m-%d')  # Format date as string
+        date_str = t['date'].strftime('%Y-%m-%d')
         by_date[date_str] = by_date.get(date_str, 0) + t['amount']
-    
-    # Populate dates and trend_amounts for the line chart
+
+    summary['amounts'] = list(by_category.values())
     summary['dates'] = list(by_date.keys())
     summary['trend_amounts'] = list(by_date.values())
 
     return render_template('transactions.html', transactions=transactions, summary=summary)
+
 
 # Categories Route (unchanged)
 @main_bp.route('/categories')

@@ -12,6 +12,22 @@
         <canvas id="spendingTrendChart"></canvas>
     </div>
 
+    <!-- Filters Section -->
+    <div class="filters">
+        <label for="filter-date">Filter by Date:</label>
+        <input type="date" id="filter-date" name="filter_date">
+        
+        <label for="filter-category">Filter by Category:</label>
+        <select id="filter-category" name="filter_category">
+            <option value="">All Categories</option>
+            {% for category in summary.categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+        
+        <button onclick="applyFilters()">Apply Filters</button>
+    </div>
+
     <!-- Add Transaction and Delete Transaction(s) Buttons -->
     <div class="action-buttons">
         <a href="{{ url_for('main.add_transaction') }}" class="btn">Add Transaction</a>
@@ -34,16 +50,8 @@
             <tbody>
                 {% for t in transactions %}
                 <tr>
-                    <td>
-                        <input type="checkbox" name="transaction_ids" value="{{ t._id }}">
-                    </td>
-                    <td>
-                        {% if t.date is string %}
-                            {{ t.date }}  <!-- Display as-is if it's a string -->
-                        {% else %}
-                            {{ t.date.strftime('%m-%d-%Y') }}  <!-- Format as date if it's a datetime object -->
-                        {% endif %}
-                    </td>
+                    <td><input type="checkbox" name="transaction_ids" value="{{ t._id }}"></td>
+                    <td>{% if t.date is string %}{{ t.date }}{% else %}{{ t.date.strftime('%m-%d-%Y') }}{% endif %}</td>
                     <td>{{ t.category }}</td>
                     <td>{{ t.description|capitalize }}</td>
                     <td>${{ "%.2f"|format(t.amount) }}</td>
@@ -65,25 +73,26 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ensure Jinja-rendered variables are safely injected as valid JavaScript
-            const categories = JSON.parse('{{ summary.categories|default([])|tojson|safe }}');
-            const amounts = JSON.parse('{{ summary.amounts|default([])|tojson|safe }}');
-            const dates = JSON.parse('{{ summary.dates|default([])|tojson|safe }}');
-            const trendAmounts = JSON.parse('{{ summary.trend_amounts|default([])|tojson|safe }}');
+            let categories = JSON.parse('{{ summary.categories|default([])|tojson|safe }}');
+            let amounts = JSON.parse('{{ summary.amounts|default([])|tojson|safe }}');
+            let dates = JSON.parse('{{ summary.dates|default([])|tojson|safe }}');
+            let trendAmounts = JSON.parse('{{ summary.trend_amounts|default([])|tojson|safe }}');
+            let totalSpent = amounts.reduce((acc, amount) => acc + amount, 0);
     
+            // Ensure the colors align with categories correctly
             const categoryData = {
                 labels: categories,
                 datasets: [{
                     label: 'Spending by Category',
                     data: amounts,
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 132, 0.2)', // Red
+                        'rgba(54, 162, 235, 0.2)', // Blue
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
-                    ],
+                    ].slice(0, categories.length),
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
@@ -91,7 +100,7 @@
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
                         'rgba(255, 159, 64, 1)'
-                    ],
+                    ].slice(0, categories.length),
                     borderWidth: 1
                 }]
             };
@@ -120,6 +129,17 @@
                         title: {
                             display: true,
                             text: 'Spending by Category'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    let index = tooltipItem.dataIndex;
+                                    let category = categoryData.labels[index];
+                                    let amount = categoryData.datasets[0].data[index];
+                                    let percentage = ((amount / totalSpent) * 100).toFixed(2);
+                                    return `${category}: ${percentage}%\nSpending by Category:\n$${amount.toFixed(2)}`;
+                                }
+                            }
                         }
                     }
                 }
