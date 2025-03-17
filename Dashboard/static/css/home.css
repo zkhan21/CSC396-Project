@@ -1,9 +1,8 @@
 /* Set full-page background */
 body {
     font-family: 'Poppins', sans-serif;
-    background: url("/static/img/smartExpenseTrackerLogo.jpeg") no-repeat center top;
-    background-size: 15%; /* Reduce the size of the image */
     background-color: #0F172A; /* Fallback color */
+    color: #FFFFFF;
     margin: 0;
     padding: 0;
     display: flex;
@@ -17,7 +16,7 @@ body {
 .home-container {
     text-align: center;
     padding: 2rem;
-    background: #0F172A; /* Light transparency */
+    background: none; /* Light transparency */
     border-radius: 12px;
     box-shadow: none;
     width: 90%;
@@ -25,18 +24,15 @@ body {
     margin: 6rem auto; /* Pushes the container down */
 }
 
-
-
-/* Home Page Banner */
-.home-banner {
-    width: 100%;
-    max-width: 600px;
-    display: block;
-    margin: 0 auto 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+/* Logo Container */
+.logo-container {
+    margin-bottom: 2rem;
 }
 
+.logo-container img {
+    width: 400px; /* Adjust the size of the logo */
+    height: auto;
+}
 
 /* Welcome Message */
 h1 {
@@ -49,11 +45,10 @@ h1 {
     margin-bottom: 1rem;
 }
 
-
 /* Subtitle */
 h2 {
     font-size: 1.8rem;
-    color: #333;
+    color: #FFFFFF; /* Changed to white for better contrast */
     font-weight: 600;
     margin-bottom: 1.5rem;
 }
@@ -61,24 +56,66 @@ h2 {
 /* Date & Time Styles */
 .date-time {
     font-size: 1.4rem;
-    color: #444;
+    color: #FFFFFF; /* Changed to white for better contrast */
     margin-bottom: 1.2rem;
 }
 
 #current-date, #current-time {
     font-weight: bold;
-    color: #222;
+    color: #FFFFFF; /* Changed to white for better contrast */
 }
 
 /* Link Styling */
 .dashboard-link a {
     font-weight: 600;
-    color: #007bff;
+    color: #A5D610;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .dashboard-link a:hover {
+    color: #69773e;
+    text-decoration: underline;
+}
+
+/* Home Page Banner */
+.home-banner {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Login Prompt */
+.login-prompt {
+    font-size: 1.2rem;
+    color: #FFFFFF;
+    margin-top: 1.5rem;
+}
+
+.login-prompt a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-prompt a:hover {
     color: #0056b3;
     text-decoration: underline;
+}
+
+/* Additional Styling for Aesthetic */
+.home-container {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

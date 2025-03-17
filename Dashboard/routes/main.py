@@ -40,18 +40,28 @@ def transactions():
 
     # Calculate summary data for charts
     summary = {
-        'total': sum(t.get('amount', 0) for t in transactions),
+        'balance': 0,  # Initialize balance
         'categories': [],
         'amounts': [],
         'dates': [],
-        'trend_amounts': []
+        'trend_amounts': [],
+        'deposit_withdrawal': [0, 0]  # [Deposit, Withdrawal]
     }
 
-    # Calculate spending by category
+    # Calculate spending by category and balance
     by_category = {}
     for t in transactions:
         category = t.get('category', 'Uncategorized')
-        by_category[category] = by_category.get(category, 0) + t.get('amount', 0)
+        amount = t.get('amount', 0)
+        by_category[category] = by_category.get(category, 0) + amount
+
+        # Update balance based on category
+        if category == 'Deposit':
+            summary['balance'] += amount
+            summary['deposit_withdrawal'][0] += amount  # Add to deposit total
+        elif category == 'Withdrawal':
+            summary['balance'] -= amount
+            summary['deposit_withdrawal'][1] += amount  # Add to withdrawal total
 
     summary['categories'] = list(by_category.keys())
     summary['amounts'] = list(by_category.values())

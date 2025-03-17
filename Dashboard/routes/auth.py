@@ -60,7 +60,7 @@ def register():
             hashed_password = scrypt.hash(password.encode('utf-8'), salt, N=16384, r=8, p=1).hex()
             
             # Pre-made categories
-            pre_made_categories = ['Food', 'Shopping', 'Transport', 'Entertainment', 'Other']
+            pre_made_categories = ['Food', 'Shopping', 'Transport', 'Entertainment', 'Withdrawal', 'Deposit', 'Other']
             
             # Insert new user with the hashed password and pre-made categories
             db.users.insert_one({

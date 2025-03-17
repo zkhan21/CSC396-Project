@@ -7,9 +7,20 @@
     
     <!-- Summary Section -->
     <div class="summary">
-        <h2>Total Spent: ${{ "%.2f"|format(summary.total) }}</h2>
-        <canvas id="categoryChart"></canvas>
-        <canvas id="spendingTrendChart"></canvas>
+        <h2>Total Balance: ${{ "%.2f"|format(summary.balance) }}</h2>
+        
+        <!-- Charts Container -->
+        <div class="charts-container">
+            <!-- Spending by Category (Excluding Deposits and Withdrawals) -->
+            <div class="chart">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            
+            <!-- Deposit vs Withdrawal Chart -->
+            <div class="chart">
+                <canvas id="depositWithdrawalChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <!-- Filters Section -->
@@ -54,7 +65,9 @@
                     <td>{% if t.date is string %}{{ t.date }}{% else %}{{ t.date.strftime('%m-%d-%Y') }}{% endif %}</td>
                     <td>{{ t.category }}</td>
                     <td>{{ t.description|capitalize }}</td>
-                    <td>${{ "%.2f"|format(t.amount) }}</td>
+                    <td class="{% if t.category == 'Withdrawal' %}withdrawal{% elif t.category == 'Deposit' %}deposit{% endif %}">
+                        ${{ "%.2f"|format(t.amount) }}
+                    </td>
                     <td class="table-actions">
                         <a href="{{ url_for('main.edit_transaction', transaction_id=t._id) }}" class="btn btn-small">Edit</a>
                         <a href="{{ url_for('main.delete_transaction', transaction_id=t._id) }}" class="btn btn-small btn-secondary">Delete</a>
@@ -77,14 +90,25 @@
             let amounts = JSON.parse('{{ summary.amounts|default([])|tojson|safe }}');
             let dates = JSON.parse('{{ summary.dates|default([])|tojson|safe }}');
             let trendAmounts = JSON.parse('{{ summary.trend_amounts|default([])|tojson|safe }}');
+            let depositWithdrawalTotals = JSON.parse('{{ summary.deposit_withdrawal|default([])|tojson|safe }}');
             let totalSpent = amounts.reduce((acc, amount) => acc + amount, 0);
-    
-            // Ensure the colors align with categories correctly
+
+            // Filter out "Deposit" and "Withdrawal" from the main pie chart
+            let filteredCategories = [];
+            let filteredAmounts = [];
+            for (let i = 0; i < categories.length; i++) {
+                if (categories[i] !== 'Deposit' && categories[i] !== 'Withdrawal') {
+                    filteredCategories.push(categories[i]);
+                    filteredAmounts.push(amounts[i]);
+                }
+            }
+
+            // Spending by Category (Excluding Deposits and Withdrawals)
             const categoryData = {
-                labels: categories,
+                labels: filteredCategories,
                 datasets: [{
                     label: 'Spending by Category',
-                    data: amounts,
+                    data: filteredAmounts,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)', // Red
                         'rgba(54, 162, 235, 0.2)', // Blue
@@ -92,7 +116,7 @@
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
-                    ].slice(0, categories.length),
+                    ].slice(0, filteredCategories.length),
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
@@ -100,22 +124,30 @@
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
                         'rgba(255, 159, 64, 1)'
-                    ].slice(0, categories.length),
+                    ].slice(0, filteredCategories.length),
                     borderWidth: 1
                 }]
             };
-    
-            const trendData = {
-                labels: dates,
+
+            // Deposit vs Withdrawal Chart (Bar Chart)
+            const depositWithdrawalData = {
+                labels: ['Deposit', 'Withdrawal'],
                 datasets: [{
-                    label: 'Spending Trend',
-                    data: trendAmounts,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    fill: false
+                    label: 'Deposit vs Withdrawal',
+                    data: depositWithdrawalTotals,
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)', // Green for Deposit
+                        'rgba(255, 99, 132, 0.2)'  // Red for Withdrawal
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)', // Green for Deposit
+                        'rgba(255, 99, 132, 1)'  // Red for Withdrawal
+                    ],
+                    borderWidth: 1
                 }]
             };
-    
+
+            // Render Spending by Category Chart
             const categoryCtx = document.getElementById('categoryChart').getContext('2d');
             new Chart(categoryCtx, {
                 type: 'pie',
@@ -129,26 +161,16 @@
                         title: {
                             display: true,
                             text: 'Spending by Category'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    let index = tooltipItem.dataIndex;
-                                    let category = categoryData.labels[index];
-                                    let amount = categoryData.datasets[0].data[index];
-                                    let percentage = ((amount / totalSpent) * 100).toFixed(2);
-                                    return `${category}: ${percentage}%\nSpending by Category:\n$${amount.toFixed(2)}`;
-                                }
-                            }
                         }
                     }
                 }
             });
-    
-            const trendCtx = document.getElementById('spendingTrendChart').getContext('2d');
-            new Chart(trendCtx, {
-                type: 'line',
-                data: trendData,
+
+            // Render Deposit vs Withdrawal Chart
+            const depositWithdrawalCtx = document.getElementById('depositWithdrawalChart').getContext('2d');
+            new Chart(depositWithdrawalCtx, {
+                type: 'bar', // Bar chart for better visualization
+                data: depositWithdrawalData,
                 options: {
                     responsive: true,
                     plugins: {
@@ -157,7 +179,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Spending Trend Over Time'
+                            text: 'Deposit vs Withdrawal'
                         }
                     }
                 }

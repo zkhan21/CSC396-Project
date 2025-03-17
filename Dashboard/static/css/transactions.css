@@ -59,3 +59,26 @@ th {
 .btn-secondary {
     background-color: #6c757d;
 }
+/* Charts Container */
+.charts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 2rem;
+}
+
+.chart {
+    flex: 1;
+    max-width: 48%;
+}
+
+/* Color Coding for Amounts */
+.withdrawal {
+    color: red;
+    font-weight: bold;
+}
+
+.deposit {
+    color: green;
+    font-weight: bold;
+}

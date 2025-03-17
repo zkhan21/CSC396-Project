@@ -4,13 +4,18 @@
 {% endblock %}
 {% block content %}
     <div class="home-container">
+        <!-- LOGO SECTION -->
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='img/smartExpenseTrackerLogo.jpeg') }}" alt="Smart Expense Tracker Logo" class="logo">
+        </div>
+
         {% if current_user.is_authenticated %}
-            <h1>Welcome {{ current_user.first_name }}!</h1>
+            <h1 class="welcome-text">Welcome {{ current_user.first_name }}!</h1>
         {% else %}
-            <h1>Welcome!</h1>
+            <h1 class="welcome-text">Welcome!</h1>
         {% endif %}
-        
-        <h1>SmartExpense Tracker Dashboard</h1>
+
+        <h1 class="dashboard-title">SmartExpense Tracker Dashboard</h1>
 
         <p class="date-time">Today is <span id="current-date">{{ current_date }}</span></p>
         <p class="date-time">The current time is <span id="current-time">{{ current_time }}</span></p>
