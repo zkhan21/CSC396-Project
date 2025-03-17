@@ -5,16 +5,16 @@
 {% block content %}
     <div class="home-container">
         {% if current_user.is_authenticated %}
-            <h1>Welcome {{ current_user.first_name }}.</h1>
+            <h1>Welcome {{ current_user.first_name }}!</h1>
         {% else %}
-            <h1>Welcome</h1>
+            <h1>Welcome!</h1>
         {% endif %}
+        
         <h1>SmartExpense Tracker Dashboard</h1>
 
         <p class="date-time">Today is <span id="current-date">{{ current_date }}</span></p>
         <p class="date-time">The current time is <span id="current-time">{{ current_time }}</span></p>
-        
-        <!-- Add a login link for unauthenticated users -->
+
         {% if not current_user.is_authenticated %}
             <div class="login-prompt">
                 <p>Please <a href="{{ url_for('auth.login') }}">login</a> to access your dashboard.</p>

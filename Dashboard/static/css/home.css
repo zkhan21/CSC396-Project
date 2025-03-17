@@ -1,36 +1,54 @@
-/* General Styles */
+/* Set full-page background */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #f8f9fa, #e3eaf1); /* Subtle gradient */
+    background: url("/static/img/smartExpenseTrackerLogo.jpeg") no-repeat center top;
+    background-size: 15%; /* Reduce the size of the image */
+    background-color: #0F172A; /* Fallback color */
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     min-height: 100vh;
 }
 
-/* Main Container */
+/* Main Content Box */
 .home-container {
     text-align: center;
-    padding: 3rem;
-    background: white;
+    padding: 2rem;
+    background: #0F172A; /* Light transparency */
     border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 850px;
-    margin-top: 3rem;
+    box-shadow: none;
+    width: 90%;
+    max-width: 500px; /* Keeps it compact */
+    margin: 6rem auto; /* Pushes the container down */
 }
+
+
+
+/* Home Page Banner */
+.home-banner {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
 
 /* Welcome Message */
 h1 {
     font-size: 2rem;
-    background: linear-gradient(to right, #007bff, #0056b3); /* Blue gradient */
+    background: linear-gradient(to right, #438ad5, #1e4977);
+    background-clip: text; /* Fallback for non-WebKit browsers */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;
     margin-bottom: 1rem;
 }
+
 
 /* Subtitle */
 h2 {
