@@ -126,3 +126,41 @@ body {
   font-size: 20px;
   font-weight: bold;
 }
+
+
+/* Home Page Container */
+.home-container {
+  text-align: center;
+  padding: 50px;
+  background-color: black; /* Dark background */
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo Styling */
+.home-logo {
+  width: 200px; /* Adjust as needed */
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Button Styling */
+.btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}

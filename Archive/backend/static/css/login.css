@@ -1,20 +1,32 @@
-/* Centered Login Form */
+/* Full-screen background */
+.login-page {
+  background-color: black; /* Set background to black */
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Centered Login Box */
 .login-container {
   max-width: 400px;
-  background: #222;
+  background: #222; /* Darker gray to contrast with black */
   padding: 25px;
-  margin: 100px auto;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
 }
 
-/* Logo */
-.login-container .logo {
-  width: 120px;
-  margin-bottom: 20px;
+/* Logo Styling */
+.logo {
+  width: 100%;
+  max-width: 200px; /* Adjust size as needed */
+  display: block;
+  margin: 0 auto 20px; /* Center image */
+  border-radius: 8px; /* Optional rounded corners */
 }
 
-/* Login Form */
+/* Login Form Styling */
 form {
   display: flex;
   flex-direction: column;
@@ -22,12 +34,11 @@ form {
 }
 
 label {
-  text-align: left;
   width: 100%;
   font-size: 16px;
   font-weight: bold;
+  color: white; /* Ensure text is visible on dark background */
   margin-bottom: 5px;
-  color: #ddd;
 }
 
 /* Input Fields */
@@ -39,7 +50,6 @@ input {
   background: #333;
   color: white;
   font-size: 16px;
-  text-align: left;
   margin-bottom: 15px;
 }
 
@@ -59,7 +69,6 @@ input:focus {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 10px;
 }
 
 .login-btn:hover {
