@@ -1,31 +1,66 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #f8f9fa, #e3eaf1); /* Subtle gradient */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Main Container */
 .home-container {
     text-align: center;
-    padding: 2rem;
+    padding: 3rem;
     background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 850px;
+    margin-top: 3rem;
 }
 
+/* Welcome Message */
 h1 {
-    color: #007bff;
-    margin-bottom: 1.5rem;
-}
-
-.date-time {
-    font-size: 1.5rem;
-    color: #555;
+    font-size: 2rem;
+    background: linear-gradient(to right, #007bff, #0056b3); /* Blue gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
     margin-bottom: 1rem;
 }
 
-#current-date {
-    font-weight: bold;
+/* Subtitle */
+h2 {
+    font-size: 1.8rem;
     color: #333;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
 }
 
-#current-time {
+/* Date & Time Styles */
+.date-time {
+    font-size: 1.4rem;
+    color: #444;
+    margin-bottom: 1.2rem;
+}
+
+#current-date, #current-time {
     font-weight: bold;
-    color: #333;
+    color: #222;
+}
+
+/* Link Styling */
+.dashboard-link a {
+    font-weight: 600;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.dashboard-link a:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }

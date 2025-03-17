@@ -33,7 +33,7 @@ def login():
                     user = User(user_data)
                     login_user(user)  # Log in the user
                     flash('Logged in successfully!', 'success')
-                    return redirect(url_for('main.dashboard'))
+                    return redirect(url_for('main.home'))
         
         # If login fails
         flash('Invalid email or password', 'error')
@@ -43,16 +43,18 @@ def login():
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        first_name = request.form.get('first_name')  # Capture first name
+        last_name = request.form.get('last_name')  # Capture last name
         email = request.form.get('email')
         password = request.form.get('password')
-        
-        # Check if user already exists
+
+        # Check if the user already exists
         if db.users.find_one({'email': email}):
             flash('An account with this email already exists.', 'error')
             return redirect(url_for('auth.register'))
         else:
             # Generate a random salt
-            salt = os.urandom(16)  # 16 bytes (128 bits) of random data
+            salt = os.urandom(16)  # 16 bytes of random data
             
             # Hash the password using scrypt
             hashed_password = scrypt.hash(password.encode('utf-8'), salt, N=16384, r=8, p=1).hex()
@@ -62,6 +64,8 @@ def register():
             
             # Insert new user with the hashed password and pre-made categories
             db.users.insert_one({
+                'first_name': first_name,  # Save first name
+                'last_name': last_name,  # Save last name
                 'email': email,
                 'password': f"scrypt:{salt.hex()}:{hashed_password}",  # Store the salt and hash
                 'created_at': datetime.utcnow(),

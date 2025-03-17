@@ -4,6 +4,8 @@ from bson import ObjectId
 class User(UserMixin):
     def __init__(self, user_data):
         self.id = str(user_data['_id'])  # Convert ObjectId to string
+        self.first_name = user_data.get('first_name', '')  # Retrieve first name
+        self.last_name = user_data.get('last_name', '')  # Retrieve last name
         self.email = user_data['email']
         self.password = user_data['password']
 
