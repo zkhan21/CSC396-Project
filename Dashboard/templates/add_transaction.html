@@ -23,9 +23,6 @@
             <!-- Category Dropdown -->
             <label for="category">Category:</label>
             <select id="category" name="category" required>
-                {% for category in pre_made_categories %}
-                <option value="{{ category }}">{{ category }}</option>
-                {% endfor %}
                 {% for category in user_categories %}
                 <option value="{{ category }}">{{ category }}</option>
                 {% endfor %}

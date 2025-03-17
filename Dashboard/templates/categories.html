@@ -1,41 +1,46 @@
 {% extends "base.html" %}
 {% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/categories.css') }}">
 {% endblock %}
 {% block content %}
-    <h1>Categories</h1>
+    <div class="container">
+        <h1>Categories</h1>
 
-    <!-- List of Categories -->
-    <div class="categories-list">
-        <h2>Pre-made Categories</h2>
-        <ul>
-            {% for category in pre_made_categories %}
-            <li>{{ category }}</li>
-            {% endfor %}
-        </ul>
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        <h2>Your Categories</h2>
-        <ul id="user-categories">
-            {% for category in user_categories %}
-            <li>
-                {{ category }}
-                <form method="POST" action="{{ url_for('main.delete_category') }}" style="display: inline;">
-                    <input type="hidden" name="category_name" value="{{ category }}">
-                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
-                </form>
-            </li>
-            {% else %}
-            <li>No custom categories added yet.</li>
-            {% endfor %}
-        </ul>
-    </div>
+        <!-- List of Categories -->
+        <div class="categories-list">
+            <h2>Your Categories</h2>
+            <ul id="user-categories">
+                {% for category in user_categories %}
+                <li class="category-item">
+                    <span class="category-name">{{ category }}</span>
+                    <form method="POST" action="{{ url_for('main.delete_category') }}" style="display: inline;">
+                        <input type="hidden" name="category_name" value="{{ category }}">
+                        <button type="submit" class="delete-category-btn user-category-btn">-</button>
+                    </form>
+                </li>
+                {% else %}
+                <li>No categories added yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <!-- Add Category Form -->
-    <div class="add-category">
-        <h2>Add a New Category</h2>
-        <form method="POST" action="{{ url_for('main.add_category') }}">
-            <input type="text" name="category_name" placeholder="Enter a new category" required>
-            <button type="submit" class="btn">Add Category</button>
-        </form>
+        <!-- Add Category Form -->
+        <div class="add-category">
+            <h2>Add a New Category</h2>
+            <form method="POST" action="{{ url_for('main.add_category') }}">
+                <input type="text" name="category_name" placeholder="Enter a new category" required>
+                <button type="submit" class="btn">Add Category</button>
+            </form>
+        </div>
     </div>
 {% endblock %}

@@ -57,11 +57,15 @@ def register():
             # Hash the password using scrypt
             hashed_password = scrypt.hash(password.encode('utf-8'), salt, N=16384, r=8, p=1).hex()
             
-            # Insert new user with the hashed password
+            # Pre-made categories
+            pre_made_categories = ['Food', 'Shopping', 'Transport', 'Entertainment', 'Other']
+            
+            # Insert new user with the hashed password and pre-made categories
             db.users.insert_one({
                 'email': email,
                 'password': f"scrypt:{salt.hex()}:{hashed_password}",  # Store the salt and hash
-                'created_at': datetime.utcnow()
+                'created_at': datetime.utcnow(),
+                'categories': pre_made_categories  # Initialize with pre-made categories
             })
             flash('Registration successful! Please log in.', 'success')
             return redirect(url_for('auth.login'))

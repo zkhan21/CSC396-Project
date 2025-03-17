@@ -1,3 +1,12 @@
+/* General Styles */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Categories List Styling */
 .categories-list {
     margin-bottom: 2rem;
 }
@@ -12,7 +21,7 @@
     padding: 0;
 }
 
-.categories-list li {
+.category-item {
     background: #f9f9f9;
     padding: 0.75rem;
     margin-bottom: 0.5rem;
@@ -22,6 +31,30 @@
     align-items: center;
 }
 
+.category-name {
+    font-weight: bold;
+}
+
+/* Delete Button Styling */
+.delete-category-btn {
+    background-color: #ff4444; /* Red for all categories */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-category-btn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Add Category Section Styling */
 .add-category {
     margin-top: 2rem;
 }
@@ -39,4 +72,46 @@
     width: 100%;
     max-width: 400px;
     margin-bottom: 1rem;
+}
+
+.add-category button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-category button:hover {
+    background-color: #0056b3;
+}
+
+/* Flash Messages Styling */
+.flash-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    animation: fadeOut 20s forwards;
+}
+
+.flash-message.success {
+    background-color: #e8f5e9;
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.flash-message.error {
+    background-color: #ffebee;
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
 }

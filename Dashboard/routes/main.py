@@ -48,7 +48,13 @@ def transactions():
     # Calculate spending trend over time (by date)
     by_date = {}
     for t in transactions:
-        date_str = t['date'].strftime('%Y-%m-%d')  # Format date as string
+        # Ensure the date is a datetime object
+        if isinstance(t['date'], str):
+            date = datetime.strptime(t['date'], '%Y-%m-%d')
+        else:
+            date = t['date']
+        
+        date_str = date.strftime('%Y-%m-%d')  # Format date as string
         by_date[date_str] = by_date.get(date_str, 0) + t['amount']
     
     # Populate dates and trend_amounts for the line chart
@@ -61,26 +67,33 @@ def transactions():
 @main_bp.route('/categories')
 @login_required
 def categories():
-    pre_made_categories = ['Food', 'Shopping', 'Transport', 'Entertainment', 'Other']
-    
     # Fetch user-specific categories from the database
     user = db.users.find_one({'_id': ObjectId(current_user.id)})
     user_categories = user.get('categories', [])  # Get the user's custom categories
     
-    return render_template('categories.html', pre_made_categories=pre_made_categories, user_categories=user_categories)
+    return render_template('categories.html', user_categories=user_categories)
 
-# Add Category Route (unchanged)
+
+# Add Category Route (updated)
 @main_bp.route('/add_category', methods=['POST'])
 @login_required
 def add_category():
     category_name = request.form.get('category_name')
     if category_name:
-        # Add the category to the user's list in the database
-        db.users.update_one(
-            {'_id': ObjectId(current_user.id)},
-            {'$addToSet': {'categories': category_name}}
-        )
-        flash(f'Category "{category_name}" added successfully!', 'success')
+        # Fetch user-specific categories from the database
+        user = db.users.find_one({'_id': ObjectId(current_user.id)})
+        user_categories = user.get('categories', [])  # Get the user's custom categories
+        
+        # Check if the category already exists
+        if category_name in user_categories:
+            flash(f'Category "{category_name}" already exists!', 'error')
+        else:
+            # Add the category to the user's list in the database
+            db.users.update_one(
+                {'_id': ObjectId(current_user.id)},
+                {'$addToSet': {'categories': category_name}}
+            )
+            flash(f'Category "{category_name}" added successfully!', 'success')
     return redirect(url_for('main.categories'))
 
 # Delete Category Route (unchanged)
@@ -101,9 +114,6 @@ def delete_category():
 @main_bp.route('/add_transaction', methods=['GET', 'POST'])
 @login_required
 def add_transaction():
-    # Pre-defined categories
-    pre_made_categories = ['Food', 'Shopping', 'Transport', 'Entertainment', 'Other']
-    
     # Get today's date in YYYY-MM-DD format
     today = datetime.today().strftime('%Y-%m-%d')
     
@@ -116,7 +126,10 @@ def add_transaction():
         amount = float(request.form.get('amount'))
         category = request.form.get('category')
         description = request.form.get('description')
-        date = request.form.get('date')  # Get the date from the form
+        date_str = request.form.get('date')  # Get the date from the form as a string
+        
+        # Convert the date string to a datetime object
+        date = datetime.strptime(date_str, '%Y-%m-%d')
         
         # Create and save the transaction
         transaction = Transaction(current_user.id, amount, category, description, date)
@@ -125,8 +138,8 @@ def add_transaction():
         flash('Transaction added successfully!')
         return redirect(url_for('main.transactions'))
     
-    # Render the form with today's date, pre-made categories, and user categories
-    return render_template('add_transaction.html', today=today, pre_made_categories=pre_made_categories, user_categories=user_categories)
+    # Render the form with today's date and user categories
+    return render_template('add_transaction.html', today=today, user_categories=user_categories)
 
 # Delete Transaction Route (unchanged)
 @main_bp.route('/delete_transaction/<transaction_id>')
@@ -140,6 +153,13 @@ def delete_transaction(transaction_id):
 @main_bp.route('/edit_transaction/<transaction_id>', methods=['GET', 'POST'])
 @login_required
 def edit_transaction(transaction_id):
+    # Fetch the transaction to edit
+    transaction = db.transactions.find_one({'_id': ObjectId(transaction_id)})
+    
+    # Fetch user-specific categories from the database
+    user = db.users.find_one({'_id': ObjectId(current_user.id)})
+    user_categories = user.get('categories', [])  # Get the user's custom categories
+    
     if request.method == 'POST':
         # Handle form submission
         update_data = {
@@ -153,11 +173,8 @@ def edit_transaction(transaction_id):
         flash('Transaction updated successfully!')
         return redirect(url_for('main.transactions'))
     
-    # Fetch the transaction to edit
-    transaction = db.transactions.find_one({'_id': ObjectId(transaction_id)})
-    
-    # Render the edit form with the transaction data
-    return render_template('edit_transaction.html', transaction=transaction)
+    # Render the edit form with the transaction data and user categories
+    return render_template('edit_transaction.html', transaction=transaction, user_categories=user_categories)
 
 # Bulk Delete Transactions Route (unchanged)
 @main_bp.route('/delete_transactions', methods=['POST'])

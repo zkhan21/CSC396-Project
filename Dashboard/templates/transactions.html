@@ -37,7 +37,13 @@
                     <td>
                         <input type="checkbox" name="transaction_ids" value="{{ t._id }}">
                     </td>
-                    <td>{{ t.date.strftime('%m-%d-%Y') }}</td>
+                    <td>
+                        {% if t.date is string %}
+                            {{ t.date }}  <!-- Display as-is if it's a string -->
+                        {% else %}
+                            {{ t.date.strftime('%m-%d-%Y') }}  <!-- Format as date if it's a datetime object -->
+                        {% endif %}
+                    </td>
                     <td>{{ t.category }}</td>
                     <td>{{ t.description|capitalize }}</td>
                     <td>${{ "%.2f"|format(t.amount) }}</td>
@@ -110,36 +116,10 @@
                     plugins: {
                         legend: {
                             position: 'top',
-                            labels: {
-                                generateLabels: function(chart) {
-                                    const data = chart.data;
-                                    if (data.labels.length && data.datasets.length) {
-                                        return data.labels.map(function(label, i) {
-                                            const value = data.datasets[0].data[i];
-                                            const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                            const percentage = ((value / total) * 100).toFixed(2);
-                                            return {
-                                                text: `${label}: $${value} (${percentage}%)`, // Add $ and percentage
-                                                fillStyle: data.datasets[0].backgroundColor[i],
-                                                hidden: false,
-                                                index: i
-                                            };
-                                        });
-                                    }
-                                    return [];
-                                }
-                            }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(2);
-                                    return `${label}: $${value} (${percentage}%)`; // Add $ and percentage
-                                }
-                            }
+                        title: {
+                            display: true,
+                            text: 'Spending by Category'
                         }
                     }
                 }
@@ -164,5 +144,4 @@
             });
         });
     </script>
-    
 {% endblock %}

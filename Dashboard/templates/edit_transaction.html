@@ -23,11 +23,9 @@
             <!-- Category Dropdown -->
             <label for="category">Category:</label>
             <select id="category" name="category" required>
-                <option value="Food" {% if transaction.category == 'Food' %}selected{% endif %}>Food</option>
-                <option value="Shopping" {% if transaction.category == 'Shopping' %}selected{% endif %}>Shopping</option>
-                <option value="Transport" {% if transaction.category == 'Transport' %}selected{% endif %}>Transport</option>
-                <option value="Entertainment" {% if transaction.category == 'Entertainment' %}selected{% endif %}>Entertainment</option>
-                <option value="Other" {% if transaction.category == 'Other' %}selected{% endif %}>Other</option>
+                {% for category in user_categories %}
+                <option value="{{ category }}" {% if transaction.category == category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
             </select>
             <br>
 
