@@ -23,44 +23,46 @@ def home():
 def dashboard():
     return render_template('dashboard.html')
 
-# Transactions Route (unchanged)
 @main_bp.route('/transactions')
 @login_required
 def transactions():
-    filter_date = request.args.get('filter_date')
-    filter_category = request.args.get('filter_category')
-
     # Get transactions for the current user
-    query = {'user_id': current_user.id}
+    transactions = list(Transaction.get_by_user_id(db, current_user.id))
 
-    if filter_date:
-        query['date'] = datetime.strptime(filter_date, '%Y-%m-%d')
-    
-    if filter_category:
-        query['category'] = filter_category
-
-    transactions = list(Transaction.get_filtered(db, query))
+    for t in transactions:
+        date_value = t.get('date', None)  # Retrieve date field
+        
+        if isinstance(date_value, str):  # If it's a string, convert to datetime
+            try:
+                t['date'] = datetime.strptime(date_value, '%Y-%m-%d')
+            except ValueError:
+                t['date'] = None  # Handle invalid date format
 
     # Calculate summary data for charts
     summary = {
-        'total': sum(t['amount'] for t in transactions),
-        'categories': list(set(t['category'] for t in transactions)),  # Unique categories
+        'total': sum(t.get('amount', 0) for t in transactions),
+        'categories': [],
         'amounts': [],
         'dates': [],
         'trend_amounts': []
     }
 
-    # Calculate spending trend and categories
+    # Calculate spending by category
     by_category = {}
-    by_date = {}
-
     for t in transactions:
-        by_category[t['category']] = by_category.get(t['category'], 0) + t['amount']
-        
-        date_str = t['date'].strftime('%Y-%m-%d')
-        by_date[date_str] = by_date.get(date_str, 0) + t['amount']
+        category = t.get('category', 'Uncategorized')
+        by_category[category] = by_category.get(category, 0) + t.get('amount', 0)
 
+    summary['categories'] = list(by_category.keys())
     summary['amounts'] = list(by_category.values())
+
+    # Calculate spending trend over time (by date)
+    by_date = {}
+    for t in transactions:
+        if t['date']:  # Ensure the date is valid before formatting
+            date_str = t['date'].strftime('%Y-%m-%d')
+            by_date[date_str] = by_date.get(date_str, 0) + t.get('amount', 0)
+
     summary['dates'] = list(by_date.keys())
     summary['trend_amounts'] = list(by_date.values())
 
