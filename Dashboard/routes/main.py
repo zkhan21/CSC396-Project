@@ -4,14 +4,17 @@ from models.transaction import Transaction
 from database import db
 from bson.objectid import ObjectId
 from datetime import datetime
+import pytz
 
 main_bp = Blueprint('main', __name__)
-
+central_tz = pytz.timezone("America/Chicago")
 # Home Route (unchanged)
 @main_bp.route('/')
 def home():
-    current_date = datetime.now().strftime('%B %d, %Y')  # March 16, 2025
-    current_time = datetime.now().strftime('%I:%M %p')   # 6:44 AM
+    current_datetime = datetime.now(central_tz)  # Get current time in Central Time
+    current_date = current_datetime.strftime("%B %d, %Y")  # Example: March 17, 2025
+    current_time = current_datetime.strftime("%I:%M %p")  # Example: 11:47 AM
+
     return render_template('home.html', current_date=current_date, current_time=current_time)
 
 # Dashboard Route (new route for authenticated users)

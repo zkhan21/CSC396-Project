@@ -10,7 +10,7 @@
     <div class="container">
         <h1>Welcome to Your Dashboard</h1>
         <p>You are logged in as {{ current_user.email }}.</p>
-        <a href="{{ url_for('main.transactions') }}">View Transactions</a>
+        <a href="{{ url_for('main.home') }}">Home</a>
         <a href="{{ url_for('auth.logout') }}">Logout</a>
     </div>
 </body>
